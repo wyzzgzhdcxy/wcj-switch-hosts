@@ -184,3 +184,29 @@ func GetFindHistory(limit int) ([]string, error) {
 func nowStringID() string {
 	return time.Now().Format("20060102150405.000")
 }
+
+// AddReplaceHistory adds a replace history entry
+func AddReplaceHistory(keyword string) error {
+	id := nowStringID()
+	return db.SetConfig("replace_history_"+id, keyword)
+}
+
+// GetReplaceHistory gets replace history
+func GetReplaceHistory(limit int) ([]string, error) {
+	config, err := db.GetAllConfig()
+	if err != nil {
+		return nil, err
+	}
+
+	var history []string
+	for key, value := range config {
+		if strings.HasPrefix(key, "replace_history_") {
+			history = append(history, value)
+		}
+	}
+
+	if len(history) > limit {
+		history = history[:limit]
+	}
+	return history, nil
+}

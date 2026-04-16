@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -175,6 +176,148 @@ func (a *App) GetFindHistory(limit int) ([]string, error) {
 // AddFindHistory adds a search history entry
 func (a *App) AddFindHistory(keyword string) error {
 	return hosts.AddFindHistory(keyword)
+}
+
+// GetReplaceHistory returns replace history
+func (a *App) GetReplaceHistory(limit int) ([]string, error) {
+	return hosts.GetReplaceHistory(limit)
+}
+
+// AddReplaceHistory adds a replace history entry
+func (a *App) AddReplaceHistory(keyword string) error {
+	return hosts.AddReplaceHistory(keyword)
+}
+
+// MoveItem moves an item in the tree
+func (a *App) MoveItem(sourceID, targetID, moveType string) error {
+	return hosts.MoveItem(sourceID, targetID, moveType)
+}
+
+// UpdateItem updates a single hosts item
+func (a *App) UpdateItem(item *hosts.HostsListObject) error {
+	return hosts.UpdateItem(item)
+}
+
+// GetTreeList returns the raw tree data for a specific parent
+func (a *App) GetTreeList(parentID string) ([]*hosts.HostsListObject, error) {
+	basicData, err := hosts.GetBasicData()
+	if err != nil {
+		return nil, err
+	}
+
+	if parentID == "" {
+		return basicData.List, nil
+	}
+
+	item := hosts.FindItemByID(basicData.List, parentID)
+	if item == nil || item.Children == nil {
+		return []*hosts.HostsListObject{}, nil
+	}
+	return item.Children, nil
+}
+
+// DeleteFromTrashcan permanently deletes an item from trashcan
+func (a *App) DeleteFromTrashcan(id string) error {
+	return hosts.DeleteFromTrashcan(id)
+}
+
+// ImportDataFromURL imports data from a remote URL
+func (a *App) ImportDataFromURL(url string) error {
+	content, err := hosts.FetchRemoteContent(url)
+	if err != nil {
+		return err
+	}
+
+	var data migrate.ImportData
+	if err := json.Unmarshal([]byte(content), &data); err != nil {
+		return err
+	}
+	if data.Data == nil {
+		return fmt.Errorf("invalid data format")
+	}
+	return migrate.ImportDataFromMap(data.Data)
+}
+
+// CheckUpdate checks for updates (stub - returns false)
+func (a *App) CheckUpdate() (interface{}, error) {
+	// TODO: Implement auto-update functionality
+	return false, nil
+}
+
+// DownloadUpdate downloads the update (stub)
+func (a *App) DownloadUpdate() error {
+	// TODO: Implement auto-update functionality
+	return nil
+}
+
+// InstallUpdate installs the update (stub)
+func (a *App) InstallUpdate() error {
+	// TODO: Implement auto-update functionality
+	return nil
+}
+
+// OpenURL opens a URL in the browser
+func (a *App) OpenURL(url string) error {
+	switch runtime.GOOS {
+	case "windows":
+		return exec.Command("cmd", "/c", "start", url).Run()
+	case "darwin":
+		return exec.Command("open", url).Run()
+	default:
+		return exec.Command("xdg-open", url).Run()
+	}
+}
+
+// ShowItemInFolder shows an item in the file manager
+func (a *App) ShowItemInFolder(path string) error {
+	switch runtime.GOOS {
+	case "windows":
+		return exec.Command("explorer", "/select,", path).Run()
+	case "darwin":
+		return exec.Command("open", "-R", path).Run()
+	default:
+		return exec.Command("dolphin", "--select", path).Run()
+	}
+}
+
+// GetHistoryList returns the history list for system hosts
+func (a *App) GetHistoryList() ([]*hosts.HostsHistoryObject, error) {
+	return hosts.GetHostsHistory("system", 100)
+}
+
+// ClearHistory clears the command history
+func (a *App) ClearHistory() error {
+	return hosts.ClearHostsHistory("system")
+}
+
+// DeleteHistory deletes a history entry
+func (a *App) DeleteHistory(historyID string) error {
+	return hosts.DeleteHostsHistory(historyID)
+}
+
+// FocusWindow focuses the main window (stub)
+func (a *App) FocusWindow() error {
+	return nil
+}
+
+// ToggleDevTools toggles developer tools (stub)
+func (a *App) ToggleDevTools() error {
+	return nil
+}
+
+// CloseWindow closes the main window (stub)
+func (a *App) CloseWindow() error {
+	return nil
+}
+
+// GetCmdHistory returns command execution history
+func (a *App) GetCmdHistory(limit int) ([]*hosts.CommandRunResult, error) {
+	return nil, nil // TODO: Implement if needed
+}
+
+// ClearCmdHistory clears command history
+func (a *App) ClearCmdHistory() error {
+	return nil // TODO: Implement if needed
 }
 
 // ==================== History Operations ====================

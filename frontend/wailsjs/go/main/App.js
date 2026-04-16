@@ -10,12 +10,28 @@ export function AddItem(arg1, arg2) {
   return window['go']['main']['App']['AddItem'](arg1, arg2);
 }
 
+export function AddReplaceHistory(arg1) {
+  return window['go']['main']['App']['AddReplaceHistory'](arg1);
+}
+
 export function ApplyHosts() {
   return window['go']['main']['App']['ApplyHosts']();
 }
 
 export function CheckMigration() {
   return window['go']['main']['App']['CheckMigration']();
+}
+
+export function CheckUpdate() {
+  return window['go']['main']['App']['CheckUpdate']();
+}
+
+export function ClearCmdHistory() {
+  return window['go']['main']['App']['ClearCmdHistory']();
+}
+
+export function ClearHistory() {
+  return window['go']['main']['App']['ClearHistory']();
 }
 
 export function ClearHostsHistory(arg1) {
@@ -26,12 +42,28 @@ export function ClearTrashcan() {
   return window['go']['main']['App']['ClearTrashcan']();
 }
 
+export function CloseWindow() {
+  return window['go']['main']['App']['CloseWindow']();
+}
+
+export function DeleteFromTrashcan(arg1) {
+  return window['go']['main']['App']['DeleteFromTrashcan'](arg1);
+}
+
+export function DeleteHistory(arg1) {
+  return window['go']['main']['App']['DeleteHistory'](arg1);
+}
+
 export function DeleteHostsHistory(arg1) {
   return window['go']['main']['App']['DeleteHostsHistory'](arg1);
 }
 
 export function DeleteItem(arg1) {
   return window['go']['main']['App']['DeleteItem'](arg1);
+}
+
+export function DownloadUpdate() {
+  return window['go']['main']['App']['DownloadUpdate']();
 }
 
 export function ExportData() {
@@ -42,12 +74,20 @@ export function FindBy(arg1, arg2, arg3) {
   return window['go']['main']['App']['FindBy'](arg1, arg2, arg3);
 }
 
+export function FocusWindow() {
+  return window['go']['main']['App']['FocusWindow']();
+}
+
 export function GetAllConfig() {
   return window['go']['main']['App']['GetAllConfig']();
 }
 
 export function GetBasicData() {
   return window['go']['main']['App']['GetBasicData']();
+}
+
+export function GetCmdHistory(arg1) {
+  return window['go']['main']['App']['GetCmdHistory'](arg1);
 }
 
 export function GetConfig(arg1) {
@@ -68,6 +108,10 @@ export function GetFinalContent() {
 
 export function GetFindHistory(arg1) {
   return window['go']['main']['App']['GetFindHistory'](arg1);
+}
+
+export function GetHistoryList() {
+  return window['go']['main']['App']['GetHistoryList']();
 }
 
 export function GetHostsContent(arg1) {
@@ -94,6 +138,10 @@ export function GetPlatform() {
   return window['go']['main']['App']['GetPlatform']();
 }
 
+export function GetReplaceHistory(arg1) {
+  return window['go']['main']['App']['GetReplaceHistory'](arg1);
+}
+
 export function GetSystemHosts() {
   return window['go']['main']['App']['GetSystemHosts']();
 }
@@ -106,8 +154,20 @@ export function GetTrashcanList() {
   return window['go']['main']['App']['GetTrashcanList']();
 }
 
+export function GetTreeList(arg1) {
+  return window['go']['main']['App']['GetTreeList'](arg1);
+}
+
 export function ImportData(arg1) {
   return window['go']['main']['App']['ImportData'](arg1);
+}
+
+export function ImportDataFromURL(arg1) {
+  return window['go']['main']['App']['ImportDataFromURL'](arg1);
+}
+
+export function InstallUpdate() {
+  return window['go']['main']['App']['InstallUpdate']();
 }
 
 export function MigrateData() {
@@ -118,8 +178,16 @@ export function Minimize() {
   return window['go']['main']['App']['Minimize']();
 }
 
+export function MoveItem(arg1, arg2, arg3) {
+  return window['go']['main']['App']['MoveItem'](arg1, arg2, arg3);
+}
+
 export function MoveToTrashcan(arg1) {
   return window['go']['main']['App']['MoveToTrashcan'](arg1);
+}
+
+export function OpenURL(arg1) {
+  return window['go']['main']['App']['OpenURL'](arg1);
 }
 
 export function Quit() {
@@ -158,6 +226,18 @@ export function SetSystemHosts(arg1, arg2) {
   return window['go']['main']['App']['SetSystemHosts'](arg1, arg2);
 }
 
+export function ShowItemInFolder(arg1) {
+  return window['go']['main']['App']['ShowItemInFolder'](arg1);
+}
+
+export function ToggleDevTools() {
+  return window['go']['main']['App']['ToggleDevTools']();
+}
+
 export function ToggleItem(arg1, arg2) {
   return window['go']['main']['App']['ToggleItem'](arg1, arg2);
+}
+
+export function UpdateItem(arg1) {
+  return window['go']['main']['App']['UpdateItem'](arg1);
 }

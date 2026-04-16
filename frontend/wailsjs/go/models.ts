@@ -1,5 +1,25 @@
 export namespace hosts {
 	
+	export class CommandRunResult {
+	    _id?: string;
+	    success: boolean;
+	    stdout: string;
+	    stderr: string;
+	    add_time_ms: number;
+	
+	    static createFrom(source: any = {}) {
+	        return new CommandRunResult(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this._id = source["_id"];
+	        this.success = source["success"];
+	        this.stdout = source["stdout"];
+	        this.stderr = source["stderr"];
+	        this.add_time_ms = source["add_time_ms"];
+	    }
+	}
 	export class FindSplitter {
 	    start: number;
 	    end: number;
@@ -227,6 +247,24 @@ export namespace hosts {
 		    }
 		    return a;
 		}
+	}
+	export class HostsHistoryObject {
+	    id: string;
+	    content: string;
+	    add_time_ms: number;
+	    label?: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new HostsHistoryObject(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.id = source["id"];
+	        this.content = source["content"];
+	        this.add_time_ms = source["add_time_ms"];
+	        this.label = source["label"];
+	    }
 	}
 	
 	export class OperationResult {

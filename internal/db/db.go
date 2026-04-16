@@ -95,34 +95,45 @@ func SetHostsContent(id, content string) error {
 }
 
 // GetAllHostsTree gets all hosts tree data
-func GetAllHostsTree() ([]string, error) {
-	rows, err := DB.Query("SELECT data FROM hosts_tree")
+func GetAllHostsTree() ([]map[string]string, error) {
+	rows, err := DB.Query("SELECT id, parent_id, data FROM hosts_tree")
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 
-	var results []string
+	var results []map[string]string
 	for rows.Next() {
-		var data string
-		if err := rows.Scan(&data); err != nil {
+		var id, parentID, data string
+		if err := rows.Scan(&id, &parentID, &data); err != nil {
 			return nil, err
 		}
-		results = append(results, data)
+		results = append(results, map[string]string{
+			"id":       id,
+			"parent_id": parentID,
+			"data":     data,
+		})
 	}
 	return results, nil
 }
 
 // SetHostsTreeItem sets a hosts tree item
 func SetHostsTreeItem(id, parentID string, data interface{}) error {
-	dataJSON, err := json.Marshal(data)
-	if err != nil {
-		return err
+	var dataStr string
+	switch v := data.(type) {
+	case string:
+		dataStr = v
+	default:
+		dataJSON, err := json.Marshal(data)
+		if err != nil {
+			return err
+		}
+		dataStr = string(dataJSON)
 	}
-	_, err = DB.Exec(`
+	_, err := DB.Exec(`
 		INSERT INTO hosts_tree (id, parent_id, data) VALUES (?, ?, ?)
 		ON CONFLICT(id) DO UPDATE SET parent_id = excluded.parent_id, data = excluded.data`,
-		id, parentID, string(dataJSON))
+		id, parentID, dataStr)
 	return err
 }
 

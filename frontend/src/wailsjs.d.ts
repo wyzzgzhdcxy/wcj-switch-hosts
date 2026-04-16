@@ -1,0 +1,71 @@
+declare module 'wailsjs/go/main/App' {
+  export * from '../wailsjs/go/main/App'
+}
+
+declare module 'wailsjs/go/models' {
+  export * from '../wailsjs/go/models'
+}
+
+declare module '../wailsjs/go/main/App' {
+  import { hosts } from './models'
+  export function AddFindHistory(arg1: string): Promise<void>
+  export function AddItem(arg1: string, arg2: hosts.HostsListObject): Promise<void>
+  export function AddReplaceHistory(arg1: string): Promise<void>
+  export function ApplyHosts(): Promise<hosts.OperationResult>
+  export function CheckMigration(): Promise<boolean>
+  export function CheckUpdate(): Promise<any>
+  export function ClearCmdHistory(): Promise<void>
+  export function ClearHistory(): Promise<void>
+  export function ClearHostsHistory(arg1: string): Promise<void>
+  export function ClearTrashcan(): Promise<void>
+  export function CloseWindow(): Promise<void>
+  export function DeleteFromTrashcan(arg1: string): Promise<void>
+  export function DeleteHistory(arg1: string): Promise<void>
+  export function DeleteHostsHistory(arg1: string): Promise<void>
+  export function DeleteItem(arg1: string): Promise<void>
+  export function DownloadUpdate(): Promise<void>
+  export function ExportData(): Promise<string>
+  export function FindBy(arg1: string, arg2: boolean, arg3: boolean): Promise<Array<hosts.FindItem>>
+  export function FocusWindow(): Promise<void>
+  export function GetAllConfig(): Promise<Record<string, any>>
+  export function GetBasicData(): Promise<hosts.HostsBasicData>
+  export function GetCmdHistory(arg1: number): Promise<Array<hosts.CommandRunResult>>
+  export function GetConfig(arg1: string): Promise<any>
+  export function GetDataDir(): Promise<string>
+  export function GetDefaultDataDir(): Promise<string>
+  export function GetFinalContent(): Promise<string>
+  export function GetFindHistory(arg1: number): Promise<Array<string>>
+  export function GetHistoryList(): Promise<Array<hosts.HostsHistoryObject>>
+  export function GetHostsContent(arg1: string): Promise<string>
+  export function GetHostsHistory(arg1: string, arg2: number): Promise<Array<Record<string, any>>>
+  export function GetI18n(): Promise<Record<string, string>>
+  export function GetItem(arg1: string): Promise<hosts.HostsListObject>
+  export function GetLocale(): Promise<string>
+  export function GetPlatform(): Promise<string>
+  export function GetReplaceHistory(arg1: number): Promise<Array<string>>
+  export function GetSystemHosts(): Promise<string>
+  export function GetSystemHostsPath(): Promise<string>
+  export function GetTrashcanList(): Promise<Array<hosts.TrashcanObject>>
+  export function GetTreeList(arg1: string): Promise<Array<hosts.HostsListObject>>
+  export function ImportData(arg1: string): Promise<void>
+  export function ImportDataFromURL(arg1: string): Promise<void>
+  export function InstallUpdate(): Promise<void>
+  export function MigrateData(): Promise<void>
+  export function Minimize(): Promise<void>
+  export function MoveItem(arg1: string, arg2: string, arg3: string): Promise<void>
+  export function MoveToTrashcan(arg1: string): Promise<void>
+  export function OpenURL(arg1: string): Promise<void>
+  export function Quit(): Promise<void>
+  export function RefreshRemoteHosts(arg1: string): Promise<hosts.OperationResult>
+  export function ReplaceHostsContent(arg1: string, arg2: string, arg3: Array<hosts.FindSplitter>): Promise<void>
+  export function RestoreFromTrashcan(arg1: string): Promise<void>
+  export function SetConfig(arg1: string, arg2: any): Promise<void>
+  export function SetHostsContent(arg1: string, arg2: string): Promise<void>
+  export function SetList(arg1: Array<hosts.HostsListObject>): Promise<void>
+  export function SetLocale(arg1: string): Promise<void>
+  export function SetSystemHosts(arg1: string, arg2: string): Promise<hosts.OperationResult>
+  export function ShowItemInFolder(arg1: string): Promise<void>
+  export function ToggleDevTools(): Promise<void>
+  export function ToggleItem(arg1: string, arg2: boolean): Promise<void>
+  export function UpdateItem(arg1: hosts.HostsListObject): Promise<void>
+}

@@ -2,6 +2,7 @@ package hosts
 
 import (
 	"encoding/json"
+	"fmt"
 	"time"
 
 	"switch-hosts-wails/internal/db"
@@ -15,12 +16,57 @@ func GetBasicData() (*HostsBasicData, error) {
 		return nil, err
 	}
 
-	list := []*HostsListObject{}
-	for _, data := range treeData {
+	fmt.Printf("DEBUG GetBasicData: treeData has %d rows\n", len(treeData))
+
+	// Build map for tree construction
+	itemMap := make(map[string]*HostsListObject)
+	parentMap := make(map[string]string) // itemID -> parentID
+
+	for _, row := range treeData {
+		fmt.Printf("DEBUG: row data = %q\n", row["data"])
 		var item HostsListObject
-		if err := json.Unmarshal([]byte(data), &item); err == nil {
-			list = append(list, &item)
+		if err := json.Unmarshal([]byte(row["data"]), &item); err != nil {
+			fmt.Printf("DEBUG: unmarshal error: %v\n", err)
+		} else {
+			itemMap[item.ID] = &item
+			parentMap[item.ID] = row["parent_id"]
+			fmt.Printf("DEBUG: loaded item ID=%s, Title=%s, parent=%s\n", item.ID, item.Title, row["parent_id"])
 		}
+	}
+
+	fmt.Printf("DEBUG: itemMap has %d items\n", len(itemMap))
+
+	// Build tree structure - collect all items first
+	allItems := make([]*HostsListObject, 0, len(itemMap))
+	for _, item := range itemMap {
+		allItems = append(allItems, item)
+	}
+
+	// Then build tree: collect top-level items and children separately
+	var list []*HostsListObject
+	for _, item := range allItems {
+		id := item.ID
+		parentID := parentMap[id]
+		if parentID == "" {
+			// Top level item
+			list = append(list, item)
+		} else {
+			parent := itemMap[parentID]
+			if parent != nil && parent.Type == HostsTypeFolder {
+				if parent.Children == nil {
+					parent.Children = []*HostsListObject{}
+				}
+				parent.Children = append(parent.Children, item)
+			} else {
+				// Parent not found or not a folder, add to top level
+				list = append(list, item)
+			}
+		}
+	}
+
+	fmt.Printf("DEBUG: built list has %d top-level items\n", len(list))
+	for i, item := range list {
+		fmt.Printf("  [%d] ID=%s, Title=%s\n", i, item.ID, item.Title)
 	}
 
 	// If list is empty, initialize with system hosts
@@ -48,8 +94,9 @@ func GetBasicData() (*HostsBasicData, error) {
 			if json.Unmarshal([]byte(dataStr), &data) == nil {
 				addTimeMs, _ := item["add_time_ms"].(int64)
 				parentID, _ := item["parent_id"].(string)
+				id, _ := item["id"].(string)
 				trashcan = append(trashcan, &TrashcanObject{
-					ID:        item["id"].(string),
+					ID:        id,
 					Data:      &data,
 					AddTimeMs: addTimeMs,
 					ParentID:  parentID,
@@ -117,6 +164,7 @@ func AddItem(parentID string, item *HostsListObject) error {
 	if err != nil {
 		return err
 	}
+	fmt.Printf("DEBUG AddItem: ID=%s, Title=%s, parentID=%s\n", item.ID, item.Title, parentID)
 	return db.SetHostsTreeItem(item.ID, parentID, string(data))
 }
 
